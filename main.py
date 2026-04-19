@@ -1,9 +1,12 @@
-from fastapi import FastAPI, HTTPException
+import os
 import boto3
+from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
-dynamo = boto3.resource("dynamodb", region_name="us-east-1")
-tabla = dynamo.Table("boletines")
+
+# Config con variables de entorno
+tabla_db = os.getenv("DYNAMO_TABLE")
+region = os.getenv("AWS_REGION", "us-east-1")
 
 @app.get("/boletines/{boletinid}")
 async def ver_boletin(boletinid: str, correo: str):
